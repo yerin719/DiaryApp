@@ -16,10 +16,12 @@
     "@types/styled-components": "^5.1.34",
     "@types/styled-components-react-native": "^5.2.5",
     "expo": "~53.0.0",
+    "expo-splash-screen": "^0.30.8",
     "react": "19.0.0",
     "react-native": "0.79.2",
     "react-native-safe-area-context": "^5.4.0",
     "react-native-screens": "^4.10.0",
+    "realm": "^12.14.2",
     "styled-components": "^6.1.17"
   },
   "devDependencies": {
