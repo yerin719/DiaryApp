@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Alert } from "react-native";
 import styled from "styled-components/native";
 import colors from "../colors";
-import { useDB } from "../useContext";
+import { useRealm } from "@realm/react";
 
 const View = styled.View`
   background-color: ${colors.bgColor};
@@ -59,7 +59,7 @@ const EmotionText = styled.Text`
 const emotions = ["🤯", "🥲", "🤬", "🤗", "🥰", "😊", "🤩"];
 
 const Write = ({ navigation: { goBack } }) => {
-  const realm = useDB();
+  const realm = useRealm();
   const [selectedEmotion, setEmotion] = useState(null);
   const [feelings, setFeelings] = useState("");
   const onChangeText = (text) => setFeelings(text);
@@ -69,14 +69,21 @@ const Write = ({ navigation: { goBack } }) => {
       return Alert.alert("Please complete form.");
     }
 
-    realm.write(() => {
-      realm.create("Feeling", {
-        _id: Date.now(),
-        emotion: selectedEmotion,
-        message: feelings,
+    try {
+      realm.write(() => {
+        const newFeeling = realm.create("Feeling", {
+          _id: Date.now(),
+          emotion: selectedEmotion,
+          message: feelings,
+        });
+        console.log("저장된 데이터:", newFeeling);
       });
-    });
-    goBack();
+      console.log("현재 저장된 모든 데이터:", realm.objects("Feeling"));
+      goBack();
+    } catch (error) {
+      console.error("Realm 저장 에러:", error);
+      Alert.alert("저장 실패", "데이터를 저장하는 중 오류가 발생했습니다.");
+    }
   };
   return (
     <View>
