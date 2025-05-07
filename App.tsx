@@ -1,33 +1,11 @@
-import React from 'react';
-import styled from 'styled-components/native';
+import { NavigationContainer } from "@react-navigation/native";
+import React from "react";
+import Navigator from "./navigator";
 
-const Container = styled.View`
-  flex: 1;
-  background-color: #fff;
-  align-items: center;
-  justify-content: center;
-`;  
-
-const Title = styled.Text`
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20px;
-`;
-
-const Subtitle = styled.Text`
-  font-size: 16px;
-  color: #666;
-`;
-
-function App(): React.JSX.Element {
+export default function App() {
   return (
-
-    <Container>
-      <Title>Welcome to My Diary App</Title>
-      <Subtitle>Start writing your story</Subtitle>
-    </Container>
+    <NavigationContainer>
+      <Navigator />
+    </NavigationContainer>
   );
 }
-
-export default App;
