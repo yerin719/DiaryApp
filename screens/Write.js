@@ -70,16 +70,24 @@ const Write = ({ navigation: { goBack } }) => {
     }
 
     try {
+      console.log("저장 시작:", { emotion: selectedEmotion, message: feelings });
       realm.write(() => {
-        const newFeeling = realm.create("Feeling", {
+        realm.create("Feeling", {
           _id: Date.now(),
           emotion: selectedEmotion,
           message: feelings,
         });
-        console.log("저장된 데이터:", newFeeling);
       });
-      console.log("현재 저장된 모든 데이터:", realm.objects("Feeling"));
-      goBack();
+      console.log("저장 완료");
+      
+      // 상태 초기화
+      setEmotion(null);
+      setFeelings("");
+      
+      // 약간의 지연 후 화면 전환
+      setTimeout(() => {
+        goBack();
+      }, 100);
     } catch (error) {
       console.error("Realm 저장 에러:", error);
       Alert.alert("저장 실패", "데이터를 저장하는 중 오류가 발생했습니다.");
