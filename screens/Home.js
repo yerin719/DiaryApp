@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, FlatList } from "react-native";
+import { FlatList, TouchableOpacity } from "react-native";
 import { useRealm, useQuery } from "@realm/react";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -56,12 +56,19 @@ const Home = ({ navigation: { navigate } }) => {
   useEffect(() => {
     const feelings = realm.objects("Feeling");
     feelings.addListener((feelings,changes) => {
-        setFeelings(feelings);
+        setFeelings([...feelings]);
     });
     return () => {
       feelings.removeAllListeners();
     };
   }, []);
+
+  const onPress = (id) => {
+    realm.write(() => {
+      const feeling = realm.objectForPrimaryKey("Feeling", id);
+      realm.delete(feeling);
+    });
+  };
 
   return (
     <Container>
@@ -70,10 +77,12 @@ const Home = ({ navigation: { navigate } }) => {
         data={feelings}
         keyExtractor={(item) => item._id.toString()}
         renderItem={({ item }) => (
-          <EmotionContainer>
-            <EmotionText>{item.emotion}</EmotionText>
-            <MessageText>{item.message}</MessageText>
-          </EmotionContainer>
+          <TouchableOpacity onPress={() => onPress(item._id)}>
+            <EmotionContainer>
+              <EmotionText>{item.emotion}</EmotionText>
+              <MessageText>{item.message}</MessageText>
+            </EmotionContainer>
+          </TouchableOpacity>
         )}
       />
       <Btn onPress={() => navigate("Write")}>
